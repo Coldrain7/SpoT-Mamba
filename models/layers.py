@@ -67,7 +67,7 @@ class TemporalEmbedding(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # x: (batch_size, in_steps, num_nodes, in_dim)
         # out: (batch_size, in_steps, num_nodes, 3*emb_dim)
-
+        # PEMS04.npz文件已经被处理过，tod与dow部分就是处理过的数据
         feat = x[..., :self.in_dim]
         tod = x[..., 1]
         dow = x[..., 2]

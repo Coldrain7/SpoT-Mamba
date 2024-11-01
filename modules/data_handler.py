@@ -36,8 +36,8 @@ class DataHandler():
 
         self.scaler = StandardScaler()
         sequence = data["sequence"]
+        # 将flow维度数据进行标准化
         sequence[:, :, 0] = self.scaler.fit_transform(sequence[:, :, 0])
-
         self.sequence: torch.Tensor = torch.tensor(sequence, dtype=torch.float32)
         self.graph: dgl.DGLGraph = data["graph"]
 

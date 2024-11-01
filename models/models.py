@@ -195,7 +195,7 @@ class SpoTMamba(nn.Module):
             - h_walk: (num_nodes, emb_dim)
             - out: (batch_size, T, num_nodes, out_dim) ~ T+1:T+T
         '''
-
+        # 原始序列直接作为输入
         batch_size, num_steps, num_nodes, _ = x.shape
 
         # Input Processing
@@ -206,12 +206,16 @@ class SpoTMamba(nn.Module):
         # Temporal Scan
         h_temporal = h.transpose(1, 2)  # (batch_size, num_nodes, T, emb_scan_dim)
         h_temporal = h_temporal.reshape(batch_size * num_nodes, num_steps, -1)
-
+        # h_temporal(batch_size * num_nodes, num_steps, emb_scan_dim)
         residual = None
         for block in self.temporal_blocks:
             h_temporal, residual = block(h_temporal, residual)
         h_temporal = h_temporal.reshape(batch_size, num_nodes, num_steps, -1)
-        h_temporal = h_temporal.transpose(1, 2)  # (batch_size, T, num_nodes, emb_scan_dim)
+        h_temporal = h_temporal.transpose(1, 2)
+        # (batch_size, steps, num_nodes, emb_scan_dim)
+        # batch_size, num_patch, num_nodes, steps
+        # TODO: 仿照原代码将数据映射出一个emd_scan_dim维度，并将前三个维度融合为一个维度作为mamba模块输入
+        # TODO: 修改early stop patience参数
 
         # Spatial Mixing
         h_spatial = h_temporal.reshape(batch_size * num_steps, num_nodes, -1)

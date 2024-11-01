@@ -31,6 +31,9 @@ To train SpoT-Mamba, use the `run.py` file as follows:
 ```python
 python run.py --config_path=./template.json
 ```
+```bash
+python ../PITS_self_supervised/PITS_pretrain.py --dset_pretrain PEMS04 --context_points 12 --target_points 12 --d_model 128 --patch_len 12 --stride 12
+```
 Results will be printed in the terminal and saved in the directory according to the configuration file.
 
 You can find log files and checkpoints resulting from experiments in the `f"experimental_results/{dataset}-{in_steps}-{out_steps}-{str(train_ratio).zfill(2)}-{seed}-{model}"` directory.
